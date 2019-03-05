@@ -1,11 +1,12 @@
 FROM node:8-alpine
 
-COPY docker-entrypoint.sh /docker-entrypoint.sh
+WORKDIR /usr/src/yapi/vendors
 
-WORKDIR /usr/src/yapi
+COPY config.json /usr/src/yapi/config.json
 
-COPY . .
+COPY vendors/ /usr/src/yapi/vendors/
 
-RUN apk add --no-cache bash && chmod +x /docker-entrypoint.sh
+RUN npm install --production --registry https://registry.npm.taobao.org
 
-CMD /docker-entrypoint.sh
+CMD node server/app.js
+
